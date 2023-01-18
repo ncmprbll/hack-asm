@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/ncmprbll/hack-asm/parser"
 )
 
 func main() {
@@ -36,7 +38,14 @@ func main() {
 			continue
 		}
 
-		fmt.Println(lineNum, line)
+		p := parser.NewParser(line)
+		bin, err := p.ToBinary()
+
+		if err != nil {
+			continue
+		}
+
+		fmt.Println(lineNum, line, bin)
 		lineNum++
 	}
 
