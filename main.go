@@ -2,16 +2,24 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strings"
 
 	"github.com/ncmprbll/hack-asm/parser"
+	"path/filepath"
 )
 
 func main() {
-	file, err := os.Open("Add.asm")
+	args := os.Args
+
+	if len(args) < 2 {
+		return
+	}
+
+	path := args[1]
+
+	file, err := os.Open(path)
 
 	if err != nil {
 		log.Fatal(err)
@@ -21,7 +29,13 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	lineNum := 0
+	output, err := os.Create(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)) + ".hack")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer output.Close()
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -45,8 +59,7 @@ func main() {
 			continue
 		}
 
-		fmt.Println(lineNum, line, bin)
-		lineNum++
+		output.WriteString(bin + "\n")
 	}
 
 	if err := scanner.Err(); err != nil {

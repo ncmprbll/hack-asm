@@ -33,7 +33,7 @@ func (p *parser) GetValue() string {
 }
 
 func (p *parser) GetValueCode() (string, error) {
-	i, err := strconv.ParseInt(p.GetValue(), 10, 15)
+	i, err := strconv.ParseInt(p.GetValue(), 10, 16)
 
 	if err != nil {
 		return "", err
@@ -78,7 +78,7 @@ func (p *parser) GetJump() string {
 		return ""
 	}
 
-	return p.str[index + 1:]
+	return p.str[index+1:]
 }
 
 func (p *parser) GetDestCode() (string, error) {
@@ -139,7 +139,7 @@ func (p *parser) ToBinary() (string, error) {
 			return "", err
 		}
 
-		return "111" + dest + comp + jump, nil
+		return "111" + comp + dest + jump, nil
 	}
 
 	// Unreachable error since we assume the code is error-free
